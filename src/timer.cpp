@@ -1,19 +1,23 @@
 #include <iostream>
-#include <chrono>
-#include <thread>
+#include "../include/timer.hpp"
 
 using namespace std;
 
 int main(int argc, const char** argv)
 {
-    if (argc != 2)
+    Timer t(10);
+    t.start();
+    cout << "Starting" << endl;
+    for (;;)
     {
-        cout << "Usage: timer ms" << endl;
-        return 1;
+        this_thread::sleep_for(chrono::milliseconds(1000));
+        cout << "." << endl;
+        t.step();
+        if (t.hasTriggered())
+        {
+            cout << "Done!" << endl;
+            break;
+        }
     }
-    
-    cout << argv[1] << endl;
-    this_thread::sleep_for(chrono::milliseconds(stoi(argv[1])));
-    cout << "Done!" << endl;
     return 0;
 }
